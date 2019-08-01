@@ -4,23 +4,20 @@
   </head>
   <body>
     <h1>Task</h1>
-
     <% require 'pg' %>
-
-    <% connection = PG::connect(dbname: "goya") %>
-
+    <% connection = PG::connect(dbname:"goya") %>
     <% connection.internal_encoding = "UTF-8" %>
 
     <form action="indicate.cgi" method="POST">
        Please enter the letters below<br><br>
       <input type="text"  name="input" ><br>
-      <input type="submit" name="submit" >
+      <input type="submit" name="submit">
     </form>
 
     <% result = connection.exec("select date, weight, give_for from crops
-     where not give_for='‘自家消費'and quality ='f';") %>
+     where not give_for='‘自家消費';") %>
     <% date = [] %>
-
+    
     <% result.each do |record| %>
       <%  date << "Size of bitter gourd: #{record ["weight"]} Sold to: #{record ["give_for"]}" %>
     <% end %>
@@ -31,6 +28,23 @@
        <!-- Make name = "goya" a mark of information -->
       <input type="text" name="goya" value ="<%= date.join(' ') %>">
       <input type="submit" name="submit" >
+    </form>
+
+
+    <% result1 = connection.exec("select date, weight, give_for from crops
+     where quality ='false';") %>
+    <% date = [] %>
+     
+    <% result1.each do |record| %>
+      <%  date << "bitter when quality is false: #{record ["weight"]} Sold to: #{record ["give_for"]}" %>
+    <% end %>
+
+    <form action="goya1.cgi" method="POST">
+       Press the button below to see where quality is false<br><br>
+       <!-- Substitute the data you want to send for value -->
+       <!-- Make name = "goya1" a mark of information -->
+      <input type="text" name="goya1" value ="<%= date.join(' ') %>">
+      <input type="submit" name="submit" style="background: skyblue;color:white" >
     </form>
   </body>
 </html>

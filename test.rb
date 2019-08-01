@@ -1,10 +1,10 @@
 require 'webrick'
 
 module WEBrick
-          module HTTPServlet
-            FileHandler.add_handler('rb', CGIHandler)
-          end
-        end
+  module HTTPServlet
+    FileHandler.add_handler('rb', CGIHandler)
+  end
+end
 
 server = WEBrick::HTTPServer.new({
   :DocumentRoot => '.',
@@ -15,7 +15,8 @@ server = WEBrick::HTTPServer.new({
           Signal.trap(signal){ server.shutdown }
         }
 
-server.mount('/test', WEBrick::HTTPServlet::ERBHandler, './test.html.erb')
+server.mount('/test', WEBrick::HTTPServlet::ERBHandler, 'test.html.erb')
 server.mount('/indicate.cgi', WEBrick::HTTPServlet::CGIHandler, 'indicate.rb')
 server.mount('/goya.cgi', WEBrick::HTTPServlet::CGIHandler, 'goya.rb')
+server.mount('/goya1.cgi', WEBrick::HTTPServlet::CGIHandler, 'goya1.rb')
 server.start
